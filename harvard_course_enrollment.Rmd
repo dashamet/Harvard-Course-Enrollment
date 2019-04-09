@@ -1,0 +1,36 @@
+---
+title: "Harvard Course Enrollment"
+author: "Dasha Metropolitansky"
+date: "April 9, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(fs)
+
+download.file(url = "https://registrar.fas.harvard.edu/files/fas-registrar/files/class_enrollment_summary_by_term_3.22.19.xlsx",
+              destfile = "reg_2019.xlsx",
+              mode = "wb")
+
+download.file(url = "https://registrar.fas.harvard.edu/files/fas-registrar/files/class_enrollment_summary_by_term_03.06.18.xlsx",
+              destfile = "reg_2018.xlsx",
+              mode = "wb")
+
+spring_2019 = read_excel("reg_2019.xlsx", skip = 3) %>% 
+  clean_names() %>%
+  filter(!is.na(course_name)) %>%
+  select(course_id, u_grad, course_department)
+  
+spring_2018 = read_excel("reg_2018.xlsx", skip = 3) %>% 
+  clean_names() %>%
+  filter(!is.na(course_name)) %>%
+  select(course_id, u_grad, course_department)
+
+file_delete(c("reg_2018.xlsx", "reg_2019.xlsx")) 
+```
+
+
