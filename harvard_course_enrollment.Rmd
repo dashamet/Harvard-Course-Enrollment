@@ -33,4 +33,17 @@ spring_2018 = read_excel("reg_2018.xlsx", skip = 3) %>%
 file_delete(c("reg_2018.xlsx", "reg_2019.xlsx")) 
 ```
 
+```{r}
+spring_2019 %>%
+  left_join(spring_2018, by = "course_id") %>%
+  filter(course_department.x == course_department.y) %>%
+  select(-course_department.y) %>%
+  rename(course_department = course_department.x,
+         u_grad_2019 = u_grad.x, 
+         u_grad_2018 = u_grad.y) %>%
+  group_by(course_department) %>%
+  summarise(department_total_19 = sum(u_grad_2019),
+            department_total_18 = sum(u_grad_2018)) %>%
+  filter(!(department_total_19 == 0 | department_total_18 == 0))
+```
 
