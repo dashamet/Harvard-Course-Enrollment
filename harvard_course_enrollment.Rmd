@@ -41,9 +41,24 @@ spring_2019 %>%
   rename(course_department = course_department.x,
          u_grad_2019 = u_grad.x, 
          u_grad_2018 = u_grad.y) %>%
+  mutate(course_department = recode_factor(course_department,
+                                           `African & African Amer Studies` = "African Studies",
+                                           `Classics, The` = "Classics",
+                                           `Celtic Languages & Literatures` = "Celtic Languages",
+                                           `East Asian Langs & Civ` = "East Asian Languages",
+                                           `Envi Science & Public Policy` = "Environmental Science",
+                                           `Germanic Languages & Lit` = "Germanic Languages",
+                                           `Near Eastern Languages & Civ` = "Near Eastern Languages",
+                                           `Organismic & Evolutionary Biol` = "Organismic & Evolutionary Biology",
+                                           `Religion, The Study of` = "Religion",
+                                           `Romance Languages & Lit` = "Romance Languages",
+                                           `Slavic Languages & Literatures` = "Slavic Languages",
+                                           `Stem Cell & Regenerative Biol` = "Stem Cell & Regenerative Biology")) %>%
   group_by(course_department) %>%
   summarise(department_total_19 = sum(u_grad_2019),
             department_total_18 = sum(u_grad_2018)) %>%
-  filter(!(department_total_19 == 0 | department_total_18 == 0))
+  filter(!(department_total_19 == 0 | department_total_18 == 0)) %>%
+  mutate(percent_change = round(((department_total_19 - department_total_18)/department_total_18 * 100), digits = 0))
+  
 ```
 
