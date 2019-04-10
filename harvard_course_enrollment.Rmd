@@ -48,7 +48,7 @@ file_delete(c("reg_2018.xlsx", "reg_2019.xlsx"))
 x = spring_2019 %>%
   left_join(spring_2018, by = "course_id") %>%
   
-# Subsetting the joint dataset for courses that were in the same department in both years
+# Subsetting the joint dataset for courses that were offered in the same department in both years
   
   filter(course_department.x == course_department.y) %>%
   
@@ -62,7 +62,7 @@ x = spring_2019 %>%
          u_grad_2019 = u_grad.x, 
          u_grad_2018 = u_grad.y) %>%
   
-# Renaming departments to be concise and consist
+# Renaming departments to be concise and consistent
   
   mutate(course_department = recode_factor(course_department,
                                            `African & African Amer Studies` = "African Studies",
@@ -78,19 +78,19 @@ x = spring_2019 %>%
                                            `Slavic Languages & Literatures` = "Slavic Languages",
                                            `Stem Cell & Regenerative Biol` = "Regenerative Biology")) %>%
   
-# Grouping by department and calculating the total number of students who took classes in the departments each year 
+# Grouping by department and calculating the total number of students who took classes in each department by year 
   
   group_by(course_department) %>%
   
   summarise(department_total_19 = sum(u_grad_2019),
             department_total_18 = sum(u_grad_2018)) %>%
 
-# Filtering for departments where the total number of students who enrolled in their courses is greater than 50 in 2018 and 2019
+# Filtering for departments where the total number of students enrolled in their courses is greater than 50 in both 2018 and 2019
 # I included this filter because it seems disingenuous to include a department with a very small number of students (i.e. an increase from 5 to 10 students is a 100% increase)
   
   filter(!(department_total_19 <50 | department_total_18 <50)) %>%
   
-# Creating a new variable for the percent change in enrollment from Spring 2018 - Spring 2019 
+# Creating a new variable for the percent change in enrollment from Spring 2018 - Spring 2019 and arranging in descending order of percent change in enrollment 
   
   mutate(percent_change = round(((department_total_19 - department_total_18)/department_total_18 * 100), digits = 0)) %>%
   arrange(desc(percent_change))
@@ -113,7 +113,7 @@ y = rbind(x_top, x_bottom)
 ```{r echo = FALSE}
 
 # Creating a bar plot with department on the x-axis (in ascending order by percent change in enrollment) and percent change in enrollment on the y-axis
-# The coloured fill of the bars corresponds to the size of the department (total number of students enrolled in its courses) in 2019
+# The colour of the bars corresponds to the size of the department (total number of students enrolled in its courses) in 2019
 
 y %>%
   ggplot(aes(x = reorder(course_department, percent_change), y = percent_change, fill = department_total_19)) +
@@ -124,21 +124,21 @@ y %>%
   
   coord_flip() + 
 
-# Adding a solid vertical line at the 0% change in enrollment mark and a dashed horizontal line that delineates between the top and bottom 8
+# Adding a solid vertical line at the 0% change in enrollment mark and a dashed horizontal line that delineates between the top and bottom 8 departments
   
   geom_hline(yintercept = 0, colour = "black", size = 0.5) +
   geom_vline(xintercept = 8.5, colour = "black", linetype = "dotted") +
 
-# Filling in the top and bottom halves of the graph in different colours to further delineate between the top and bottom results
+# Filling in the top and bottom halves of the graph with different colours to further delineate between the top and bottom departments
   
   geom_rect(aes(xmin = 8.5, xmax = 16.5, ymin = -Inf, ymax = Inf), alpha = 0.015, fill = "steelblue2") +
   geom_rect(aes(xmin = 0, xmax = 8.5, ymin = -Inf, ymax = Inf), alpha = 0.015, fill = "dodgerblue4") +
 
-# Changing the axes labels and adding a caption, title, and subtitle
+# Changing the axis labels and adding a caption, title, and subtitle
   
   labs(y = "Percent Change in Course Enrollment",
        x = "Department",
-       caption = "\n *Departments where a total of 50+ students took their courses in Spring 2018 & 2019
+       caption = "\n *Departments in which 50+ students took courses for Spring 2018 and 2019
        \n **The total number of students enrolled in all courses offered by the department in Spring 2019
        \n Data from the Harvard Registrar",
        title = "Changing Popularity of Harvard Courses by Department",
@@ -160,7 +160,7 @@ y %>%
   
   theme(axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0))) +
   theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0))) +
-  theme(plot.title = element_text(face="bold", margin = margin(t = 0, r = 0, b = 8, l = 0))) +
-  theme(plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 8, l = 0)))
+  theme(plot.title = element_text(face="bold", margin = margin(t = 0, r = 0, b = 9, l = 0))) +
+  theme(plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 9, l = 0)))
 ```
 
