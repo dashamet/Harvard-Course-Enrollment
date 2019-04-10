@@ -34,7 +34,7 @@ file_delete(c("reg_2018.xlsx", "reg_2019.xlsx"))
 ```
 
 ```{r}
-spring_2019 %>%
+x = spring_2019 %>%
   left_join(spring_2018, by = "course_id") %>%
   filter(course_department.x == course_department.y) %>%
   select(-course_department.y) %>%
@@ -53,12 +53,48 @@ spring_2019 %>%
                                            `Religion, The Study of` = "Religion",
                                            `Romance Languages & Lit` = "Romance Languages",
                                            `Slavic Languages & Literatures` = "Slavic Languages",
-                                           `Stem Cell & Regenerative Biol` = "Stem Cell & Regenerative Biology")) %>%
+                                           `Stem Cell & Regenerative Biol` = "Regenerative Biology")) %>%
   group_by(course_department) %>%
   summarise(department_total_19 = sum(u_grad_2019),
             department_total_18 = sum(u_grad_2018)) %>%
-  filter(!(department_total_19 == 0 | department_total_18 == 0)) %>%
-  mutate(percent_change = round(((department_total_19 - department_total_18)/department_total_18 * 100), digits = 0))
+  filter(!(department_total_19 <50 | department_total_18 <50)) %>%
+  mutate(percent_change = round(((department_total_19 - department_total_18)/department_total_18 * 100), digits = 0)) %>%
+  arrange(desc(percent_change))
+
+x_top = x %>%
+  slice(1:8)
+
+x_bottom = x %>%
+  slice(tail(row_number(), 8))
+
+y = rbind(x_top, x_bottom)
   
+```
+
+```{r}
+y %>%
+  ggplot(aes(x = reorder(course_department, percent_change), y = percent_change, fill = department_total_19)) +
+  geom_col() +
+  geom_hline(yintercept = 0, colour = "black", size = 0.5) +
+  geom_vline(xintercept = 8.5, colour = "black", linetype = "dotted") +
+  geom_rect(aes(xmin = 8.5, xmax = 16.5, ymin = -Inf, ymax = Inf), alpha = 0.015, fill = "steelblue2") +
+  geom_rect(aes(xmin = 0, xmax = 8.5, ymin = -Inf, ymax = Inf), alpha = 0.015, fill = "dodgerblue4") +
+  labs(y = "Percent Change in Course Enrollment",
+       x = "Department",
+       caption = "\n *The total number of students enrolled in all courses offered by the department
+       \n Data from the Harvard Registrar",
+       title = "Changing Popularity of Harvard Courses by Department",
+       subtitle = "Undergraduate enrollment in Spring 2018 vs. Spring 2019") +
+  coord_flip() + 
+  ylim(-60, 60) +
+  theme_minimal() +
+  guides(fill = guide_legend(title= "Department Size*")) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0))) +
+  theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))
+  
+#Move graph slightly away from y-axis header
+#Change colour scheme
+#Figure out title and subtitle
+#Change scale 
 ```
 
