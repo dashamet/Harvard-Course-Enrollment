@@ -4,7 +4,6 @@ author: "Dasha Metropolitansky"
 date: "April 9, 2019"
 output: html_document
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -138,10 +137,10 @@ y %>%
   
   labs(y = "Percent Change in Course Enrollment",
        x = "Department",
-       caption = "\n *Departments in which 50+ students took courses for Spring 2018 and 2019
+       caption = "\n *Departments in which 50+ students took courses in Spring 2018 and 2019
        \n **The total number of students enrolled in all courses offered by the department in Spring 2019
        \n Data from the Harvard Registrar",
-       title = "Changing Popularity of Harvard Courses by Department",
+       title = "Popularity of Harvard Courses by Department",
        subtitle = "Undergraduate enrollment in Spring 2018 vs. Spring 2019*") +
 
   # Changing the limits of the x-axis scale to be from -60 to 60
