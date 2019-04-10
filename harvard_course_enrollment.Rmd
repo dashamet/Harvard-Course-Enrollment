@@ -33,7 +33,7 @@ spring_2018 = read_excel("reg_2018.xlsx", skip = 3) %>%
 file_delete(c("reg_2018.xlsx", "reg_2019.xlsx")) 
 ```
 
-```{r}
+```{r include = FALSE}
 x = spring_2019 %>%
   left_join(spring_2018, by = "course_id") %>%
   filter(course_department.x == course_department.y) %>%
@@ -71,7 +71,7 @@ y = rbind(x_top, x_bottom)
   
 ```
 
-```{r}
+```{r echo = FALSE}
 y %>%
   ggplot(aes(x = reorder(course_department, percent_change), y = percent_change, fill = department_total_19)) +
   geom_col() +
@@ -81,7 +81,7 @@ y %>%
   geom_rect(aes(xmin = 0, xmax = 8.5, ymin = -Inf, ymax = Inf), alpha = 0.015, fill = "dodgerblue4") +
   labs(y = "Percent Change in Course Enrollment",
        x = "Department",
-       caption = "\n *The total number of students enrolled in all courses offered by the department
+       caption = "\n *The total number of students enrolled in all courses offered by the department in Spring 2019
        \n Data from the Harvard Registrar",
        title = "Changing Popularity of Harvard Courses by Department",
        subtitle = "Undergraduate enrollment in Spring 2018 vs. Spring 2019") +
@@ -90,11 +90,8 @@ y %>%
   theme_minimal() +
   guides(fill = guide_legend(title= "Department Size*")) +
   theme(axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0))) +
-  theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))
-  
-#Move graph slightly away from y-axis header
-#Change colour scheme
-#Figure out title and subtitle
-#Change scale 
+  theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0))) +
+  theme(plot.title = element_text(face="bold", margin = margin(t = 0, r = 0, b = 8, l = 0))) +
+  theme(plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 8, l = 0)))
 ```
 
