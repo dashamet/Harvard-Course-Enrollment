@@ -81,14 +81,15 @@ y %>%
   geom_rect(aes(xmin = 0, xmax = 8.5, ymin = -Inf, ymax = Inf), alpha = 0.015, fill = "dodgerblue4") +
   labs(y = "Percent Change in Course Enrollment",
        x = "Department",
-       caption = "\n *The total number of students enrolled in all courses offered by the department in Spring 2019
+       caption = "\n *Departments where a total of 50+ students took its courses in Spring 2018 & 2019
+       \n **The total number of students enrolled in all courses offered by the department in Spring 2019
        \n Data from the Harvard Registrar",
        title = "Changing Popularity of Harvard Courses by Department",
-       subtitle = "Undergraduate enrollment in Spring 2018 vs. Spring 2019") +
+       subtitle = "Undergraduate enrollment in Spring 2018 vs. Spring 2019*") +
   coord_flip() + 
   ylim(-60, 60) +
   theme_minimal() +
-  guides(fill = guide_legend(title= "Department Size*")) +
+  guides(fill = guide_legend(title= "Department Size**")) +
   theme(axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0))) +
   theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0))) +
   theme(plot.title = element_text(face="bold", margin = margin(t = 0, r = 0, b = 8, l = 0))) +
