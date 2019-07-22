@@ -1,4 +1,4 @@
-# Popularity of Harvard's Courses by Department
+# Popularity of Harvard Courses by Department
 
 * `harvard_course_enrollment.Rmd` contains my code for a visualization of the 16 Harvard departments with the largest change (increase or decrease) in the percentage of students enrolled in their courses from Spring 2018 to Spring 2019. It produces the HTML file `harvard_course_enrollment.html`.
 
